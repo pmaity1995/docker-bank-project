@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: account-service
+  namespace: bank-app
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: account-service
+
+  template:
+    metadata:
+      labels:
+        app: account-service
+
+    spec:
+      containers:
+      - name: account-service
+
+        image: barney1995/account-service:v2
+
+        ports:
+        - containerPort: 3000
+
+        envFrom:
+        - configMapRef:
+            name: app-config
+
+        volumeMounts:
+        - mountPath: "/data"
+          name: account-storage
+
+      volumes:
+      - name: account-storage
+        persistentVolumeClaim:
+          claimName: account-pvc

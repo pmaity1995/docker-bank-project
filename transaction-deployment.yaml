@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: transaction-service
+  namespace: bank-app
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: transaction-service
+
+  template:
+    metadata:
+      labels:
+        app: transaction-service
+
+    spec:
+      containers:
+      - name: transaction-service
+
+        image: barney1995/transaction-service:v1
+
+        ports:
+        - containerPort: 8080
+
+        env:
+        - name: JAVA_OPTS
+          value: "-Xms128m -Xmx256m"
+
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
